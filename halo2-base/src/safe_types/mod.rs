@@ -40,7 +40,11 @@ impl<F: ScalarField, const BYTES_PER_ELE: usize, const TOTAL_BITS: usize>
     /// Total bits of this type.
     pub const TOTAL_BITS: usize = TOTAL_BITS;
     /// Number of bits of each element.
-    pub const BITS_PER_ELE: usize = min(TOTAL_BITS, BYTES_PER_ELE * BITS_PER_BYTE);
+    pub const BITS_PER_ELE: usize = if TOTAL_BITS < (BYTES_PER_ELE * BITS_PER_BYTE) {
+        TOTAL_BITS
+    } else {
+        BYTES_PER_ELE * BITS_PER_BYTE
+    };
     /// Number of elements of this type.
     pub const VALUE_LENGTH: usize =
         (TOTAL_BITS + BYTES_PER_ELE * BITS_PER_BYTE - 1) / (BYTES_PER_ELE * BITS_PER_BYTE);
